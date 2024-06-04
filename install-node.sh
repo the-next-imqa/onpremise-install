@@ -1,14 +1,10 @@
 #!/usr/bin/sh
 
-function usage {
+if [ "$#" -ne 1 ]; then
     echo "usage: $0 [12|18] "
     echo "  12      install node 12"
     echo "  18      install node 18"
     exit 1
-}
-
-if [ "$#" -ne 1 ]; then
-    usage()
 fi
 
 ARG=$1
