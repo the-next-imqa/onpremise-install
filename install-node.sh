@@ -16,11 +16,13 @@ function usage {
     exit 1
 }
 
-if [[ $1 == "12"]]; then
+if [[ $1 == "12"]]
+then
   tar -xvf node-v12.22.12-linux-x64.tar.xz -C "$NODE_DIR"
   sudo ln -s "$NODE_DIR/node-v12.22.12-linux-x64/bin/node" /usr/local/bin/node
   sudo ln -s "$NODE_DIR/node-v12.22.12-linux-x64/bin/npm" /usr/local/bin/npm
-elif [[ $1 == "18"]]; then
+elif [[ $1 == "18"]]
+then
   tar -xvf node-v18.20.3-linux-x64.tar.xz -C "$NODE_DIR"
   sudo ln -s "$NODE_DIR/node-v18.20.3-linux-x64/bin/node" /usr/local/bin/node
   sudo ln -s "$NODE_DIR/node-v18.20.3-linux-x64/bin/npm" /usr/local/bin/npm
