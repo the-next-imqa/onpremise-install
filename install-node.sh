@@ -31,6 +31,7 @@ if [ -f "$NODE_PACKAGE" ]; then
     echo "Extracting $NODE_PACKAGE..."
     tar -xJvf "$NODE_PACKAGE" --strip-components 1 -C "$NODE_DIR"
     echo "Extraction completed."
+    export PATH=$NODE_DIR/bin:$PATH
     sudo ln -sf "$NODE_DIR/bin/node" /usr/local/bin/node
     sudo ln -sf "$NODE_DIR/bin/npm" /usr/local/bin/npm
     echo "Installation of Node $ARG completed."
