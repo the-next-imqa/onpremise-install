@@ -10,4 +10,8 @@ else
 fi
 
 tar -xvf node-v12.22.12-linux-x64.tar.xz -C "$NODE_DIR"
-sudo ls -s "$NODE_DIR/node-v12.22.12-linux-x64/bin/node" /usr/local/bin/nodejs
+sudo ln -s "$NODE_DIR/node-v12.22.12-linux-x64/bin/node" /usr/local/bin/node
+sudo ln -s "$NODE_DIR/node-v12.22.12-linux-x64/bin/npm" /usr/local/bin/npm
+
+export NODE_HOME=$NODE_DIR/node-v12.22.12-linux-x64
+export PATH=$PATH:$HOME/bin:$NODE_HOME/bin
