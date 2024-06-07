@@ -18,11 +18,15 @@ fi
 
 if [ $(confirm "[IMQA] Installation Repository") -eq "1" ]; then
   echo "[IMQA] Setup Repository"
-  read -p "Enter the path of the repo folder: " REPO_FOLDER
+  read -p "Enter the full path of the repo folder: " REPO_FOLDER
+  echo "[IMQA] Check the repo folder..."
+  if [ ! -d "$REPO_FOLDER" ]; then
+    mkdir -p $REPO_FOLDER
+  fi
 
   echo "[IMQA] Extracting packages"
   rpm -i tar-1.30-9.el8.x86_64.rpm
-  read -p "Enter the path of the tar file (gz): " TAR_FILE
+  read -p "Enter the full path of the tar file (gz): " TAR_FILE
   if [ -f "$TAR_FILE" ]; then
     tar -zxvf $TAR_FILE -C $REPO_FOLDER
   else
