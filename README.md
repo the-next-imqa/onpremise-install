@@ -222,7 +222,7 @@ sudo yum install --releasever 8 --installroot=/home/test/repo_root --downloadonl
 아래와 같이 파일들이 준비되어 있어야 함
 
 - 압축 유틸: `tar-1.30-9.el8.x86_64.rpm`
-- 인프라 설치 패키지: `imqa-rhel-8.x-packages.tar.xz`
+- 인프라 설치 패키지: `rhel8.x-imqa-packages.tar.xz`
 - Node Version Manager 설치: `nvm-packed-12-18.tar.xz`
 - 전체 설치 자동화 스크립트: `install.sh`
 
@@ -239,7 +239,7 @@ rpm -i tar-1.30-9.el8.x86_64.rpm
 #### 인프라 설치 패키지 압축 해제
 
 ```sh
-tar -xvJf imqa-rhel-8.x-packages.tar.xz
+tar -xvJf rhel8.x-imqa-packages.tar.xz
 ```
 
 #### Install `createrepo`
@@ -297,4 +297,11 @@ yum --disablerepo=\* --enablerepo=offline-imqa docker-ce docker-ce-cli container
 - `podman` (optional)
 ```sh
 yum --disablerepo=\* --enablerepo=offline-imqa podman python3-pip -y
+```
+
+
+## Optional VSCode Remote Tunnel
+
+```sh
+wget https://cdn.oh.camp/install/code-1.90.0-1717530065.el8.aarch64.rpm
 ```
