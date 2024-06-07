@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 function confirm {
-  while ture
+  while true
   do
     read -p "$1 [y/n] : " yn
     case $yn in
@@ -16,24 +16,33 @@ if [ "$EUID" -ne 0 ]
   exit
 fi
 
-echo "[IMQA] Extracting packages"
+if [ $(confirm "[IMQA] Installation Repository") -eq "1" ]; then
+  echo "[IMQA] Setup Repository"
+  read -p "Enter the path of the repo folder: " REPO_FOLDER
 
-rpm -i tar-1.30-9.el8.x86_64.rpm
-tar -zxvf rhel8.x-imqa-packages.tar.xz
+  echo "[IMQA] Extracting packages"
+  rpm -i tar-1.30-9.el8.x86_64.rpm
+  read -p "Enter the path of the tar file (gz): " TAR_FILE
+  if [ -f "$TAR_FILE" ]; then
+    tar -zxvf $TAR_FILE -C $REPO_FOLDER
+  else
+    echo "$TAR_FILE is not exist"
+    exit 1
+  fi
 
-# echo "[IMQA] Installing createrpo"
+  sudo rm -rf /etc/yum.repos.d/offline-imqa.repo
 
-# rpm -i repo/drpm-0.4.1-3.el8.x86_64.rpm
-# rpm -i repo/createrepo_c-libs-0.17.7-6.el8.x86_64.rpm
-# rpm -i repo/createrepo_c-0.17.7-6.el8.x86_64.rpm
+  echo "[IMQA] Creating repo"
+  echo -e "[offline-imqa]\nname=RHEL8-IMQA-Repository\nbaseurl=file://$REPO_FOLDER/repo\nenabled=1\ngpgcheck=0\nmodule_hotfixes=1" | tee /etc/yum.repos.d/offline-imqa.repo > /dev/null
+else
+  echo "[IMQA] Skipping Repository Setup"
+fi
 
-# createrepo --database $HOME/repo
 
-
-sudo rm -rf /etc/yum.repos.d/offline-imqa.repo
-
-echo "[IMQA] Creating repo"
-echo -e "[offline-imqa]\nname=RHEL8-IMQA-Repository\nbaseurl=file://$HOME/repo\nenabled=1\ngpgcheck=0\nmodule_hotfixes=1" | tee /etc/yum.repos.d/offline-imqa.repo > /dev/null
+if [ $(confirm "[IMQA] Installation Packages") -eq "0" ]; then
+  echo "[IMQA] Skipping Installation"
+  exit 0
+fi
 
 echo "[IMQA] Installing Common Dependencies"
 yum --disablerepo=\* --enablerepo=offline-imqa install git
@@ -114,3 +123,7 @@ if [ $(confirm "Do you want to install NVM with Node12 & Node18?") -eq "1" ]; th
     exit 1
   fi
 fi
+
+echo "[IMQA] Installation Done"
+echo "Reloading bash profile `source ~/.bashrc`"
+echo "Please restart your terminal to apply changes"
