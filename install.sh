@@ -54,37 +54,37 @@ yum --disablerepo=\* --enablerepo=offline-imqa install git
 echo "[IMQA] Installing nginx"
 if [ $(confirm "Do you want to install nginx?") -eq "1" ]; then
   yum --disablerepo=\* --enablerepo=offline-imqa install nginx -y
-  systemctl enable nginx
-  systemctl start nginx
+  # systemctl enable nginx
+  # systemctl start nginx
 fi
 
 echo "[IMQA] Installing haproxy"
 if [ $(confirm "Do you want to install haproxy?") -eq "1" ]; then
   yum --disablerepo=\* --enablerepo=offline-imqa install haproxy -y
-  systemctl enable haproxy
-  systemctl start haproxy
+  # systemctl enable haproxy
+  # systemctl start haproxy
 fi
 
 echo "[IMQA] Installing proxysql"
 if [ $(confirm "Do you want to install proxysql?") -eq "1" ]; then
   yum --disablerepo=\* --enablerepo=offline-imqa install proxysql -y
-  systemctl enable proxysql
-  systemctl start proxysql
+  # systemctl enable proxysql
+  # systemctl start proxysql
 fi
 
 echo "[IMQA] Installing redis"
 if [ $(confirm "Do you want to install redis?") -eq "1" ]; then
   yum --disablerepo=\* --enablerepo=offline-imqa install redis -y
-  systemctl enable redis
-  systemctl start redis
+  # systemctl enable redis
+  # systemctl start redis
 fi
 
 echo "[IMQA] Installing rabbitmq"
 if [ $(confirm "Do you want to install rabbitmq?") -eq "1" ]; then
   yum --disablerepo=\* --enablerepo=offline-imqa install socat logrotate -y
   yum --disablerepo=\* --enablerepo=offline-imqa install erlang rabbitmq-server -y
-  systemctl enable rabbitmq-server
-  systemctl start rabbitmq-server
+  # systemctl enable rabbitmq-server
+  # systemctl start rabbitmq-server
 fi
 
 echo "[IMQA] Installing JDK 11.0.3"
@@ -95,15 +95,15 @@ fi
 echo "[IMQA] Installing docker-ce"
 if [ $(confirm "Do you want to install docker-ce?") -eq "1" ]; then
   yum --disablerepo=\* --enablerepo=offline-imqa install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
-  systemctl enable docker
-  systemctl start docker
+  # systemctl enable docker
+  # systemctl start docker
 fi
 
 echo "[IMQA] Installing mysql-5.7.44"
 if [ $(confirm "Do you want to install mysql-5.7.44?") -eq "1" ]; then
   yum --disablerepo=\* --enablerepo=offline-imqa install mysql-community-server mysql-community-client -y
-  systemctl enable mysqld
-  systemctl start mysqld
+  # systemctl enable mysqld
+  # systemctl start mysqld
 fi
 
 echo "[IMQA] Installing NVM with Node12 & Node18"
