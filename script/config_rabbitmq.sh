@@ -16,6 +16,22 @@ function confirm {
   done
 }
 
+# Check if RabbitMQ is installed
+if [ $(rpm -qa | grep -c rabbitmq-server) -eq 0 ]; then
+  echo "[IMQA] RabbitMQ is not installed"
+  echo "[IMQA] Please install RabbitMQ first"
+  echo "[IMQA] Aborting RabbitMQ configuration"
+  exit 1
+fi
+# Check if RabbitMQ is running
+if [ $(systemctl is-active rabbitmq-server) == "active" ]; then
+  echo "[IMQA] RabbitMQ is running"
+else
+  echo "[IMQA] RabbitMQ is not running"
+  echo "[IMQA] Starting RabbitMQ to initialize configuration"
+  systemctl start rabbitmq-server
+fi
+
 echo "[IMQA] Configuring RabbitMQ"
 read -p "Enter the default username for RabbitMQ (default admin): " RABBITMQ_USERNAME
 if [ -z "$RABBITMQ_USERNAME" ]; then
