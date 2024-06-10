@@ -117,6 +117,8 @@ echo "[IMQA] Re-initializing MySQL"
 systemctl stop mysqld
 rm -rf $MYSQL_DATA/*
 mkdir -p $MYSQL_DATA
+semanage fcontext -a -t mysqld_db_t "$MYSQL_DATA(/.*)?"
+restorecon -Rv $MYSQL_DATA
 systemctl start mysqld
 # wait for mysql to start appox 40sec
 sleep 40
@@ -131,7 +133,7 @@ if [ "$CHANGEPASSWORD" == "y" ]; then
   echo "use mysql;
   ALTER USER 'root'@'localhost' IDENTIFIED BY '$NEWPASSWORD';
   FLUSH PRIVILEGES;
-  " | mysql --socket=$MYSQL_SOCKET -u root -p$(grep -oP "temporary password is generated for root@localhost: \K.*" $MYSQL_LOG/error.log)
+  " | mysql --connect-expired-password --socket=$MYSQL_SOCKET -u root -p$(grep -oP "temporary password is generated for root@localhost: \K.*" $MYSQL_LOG/error.log)
   echo "[IMQA] MySQL password is changed"
   # check if changed password is correct
   mysql --socket=$MYSQL_SOCKET -u root -p$NEWPASSWORD -e "exit"
