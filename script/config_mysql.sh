@@ -127,7 +127,7 @@ if [ "$CHANGEPASSWORD" == "y" ]; then
   echo "use mysql;
   ALTER USER 'root'@'localhost' IDENTIFIED BY '$NEWPASSWORD';
   FLUSH PRIVILEGES;
-  " | mysql -u root -p$(grep -oP "temporary password is generated for root@localhost: \K.*" $MYSQL_LOG/error.log)
+  " | mysql --socket=$MYSQL_SOCKET -u root -p$(grep -oP "temporary password is generated for root@localhost: \K.*" $MYSQL_LOG/error.log)
   echo "[IMQA] MySQL password is changed"
   # check if changed password is correct
   mysql -u root -p$NEWPASSWORD -e "exit"
@@ -150,7 +150,7 @@ if [ "$CHANGEPASSWORD" == "y" ]; then
     CREATE USER '$NEWUSERNAME'@'$NEWUSERHOST' IDENTIFIED BY '$NEWUSERPASSWORD';
     GRANT ALL PRIVILEGES ON *.* TO '$NEWUSERNAME'@'$NEWUSERHOST' WITH GRANT OPTION;
     FLUSH PRIVILEGES;
-    " | mysql -u root -p$NEWPASSWORD
+    " | mysql --socket=$MYSQL_SOCKET -u root -p$NEWPASSWORD
     # Check if new user is created
     mysql -u $NEWUSERNAME -p$NEWUSERPASSWORD -e "exit"
     if [ $? -eq 0 ]; then
