@@ -119,59 +119,61 @@ rm -rf $MYSQL_DATA/*
 mkdir -p $MYSQL_DATA
 semanage fcontext -a -t mysqld_db_t "$MYSQL_DATA(/.*)?"
 restorecon -Rv $MYSQL_DATA
+semanage fcontext -a -t mysqld_db_t "$MYSQL_LOG(/.*)?"
+restorecon -Rv $MYSQL_LOG
 systemctl start mysqld
 # wait for mysql to start appox 40sec
 sleep 40
 echo "[IMQA] Your mysql temporary password is: $(grep -oP "temporary password is generated for root@localhost: \K.*" $MYSQL_LOG/error.log)"
 echo "[IMQA] Please change your mysql password"
-read -p "Do you want to change your mysql password? [y/n] : " CHANGEPASSWORD
-if [ "$CHANGEPASSWORD" == "y" ]; then
-  read -p "Enter your new mysql password (default 1234): " NEWPASSWORD
-  if [ -z "$NEWPASSWORD" ]; then
-    NEWPASSWORD="1234"
-  fi
-  echo "use mysql;
-  ALTER USER 'root'@'localhost' IDENTIFIED BY '$NEWPASSWORD';
-  FLUSH PRIVILEGES;
-  " | mysql --connect-expired-password --socket=$MYSQL_SOCKET -u root -p$(grep -oP "temporary password is generated for root@localhost: \K.*" $MYSQL_LOG/error.log)
-  echo "[IMQA] MySQL password is changed"
-  # check if changed password is correct
-  mysql --socket=$MYSQL_SOCKET -u root -p$NEWPASSWORD -e "exit"
-  if [ $? -eq 0 ]; then
-    echo "[IMQA] MySQL password is correct"
-    # Create new user for mysql
-    read -p "Enter your new mysql username (default imqa): " NEWUSERNAME
-    if [ -z "$NEWUSERNAME" ]; then
-      NEWUSERNAME="imqa"
-    fi
-    read -p "Enter your new mysql user password (default 1234): " NEWUSERPASSWORD
-    if [ -z "$NEWUSERPASSWORD" ]; then
-      NEWUSERPASSWORD="1234"
-    fi
-    read -p "Enter yout new mysql user host (default %): " NEWUSERHOST
-    if [ -z "$NEWUSERHOST" ]; then
-      NEWUSERHOST="%"
-    fi
-    echo "use mysql;
-    CREATE USER '$NEWUSERNAME'@'$NEWUSERHOST' IDENTIFIED BY '$NEWUSERPASSWORD';
-    GRANT ALL PRIVILEGES ON *.* TO '$NEWUSERNAME'@'$NEWUSERHOST' WITH GRANT OPTION;
-    FLUSH PRIVILEGES;
-    " | mysql --socket=$MYSQL_SOCKET -u root -p$NEWPASSWORD
-    # Check if new user is created
-    mysql --socket=$MYSQL_SOCKET -u $NEWUSERNAME -p$NEWUSERPASSWORD -e "exit"
-    if [ $? -eq 0 ]; then
-      echo "[IMQA] MySQL user is created"
-    else
-      echo "[IMQA] MySQL user is not created"
-      echo "try following command to create user"
-      echo "CREATE USER '$NEWUSERNAME'@'$NEWUSERHOST' IDENTIFIED BY '$NEWUSERPASSWORD';"
-      echo "GRANT ALL PRIVILEGES ON *.* TO '$NEWUSERNAME'@'$NEWUSERHOST' WITH GRANT OPTION;"
-      echo "FLUSH PRIVILEGES;"
-    fi
-  else
-    echo "[IMQA] MySQL password is incorrect"
-  fi
-fi
+# read -p "Do you want to change your mysql password? [y/n] : " CHANGEPASSWORD
+# if [ "$CHANGEPASSWORD" == "y" ]; then
+#   read -p "Enter your new mysql password (default 1234): " NEWPASSWORD
+#   if [ -z "$NEWPASSWORD" ]; then
+#     NEWPASSWORD="1234"
+#   fi
+#   echo "use mysql;
+#   ALTER USER 'root'@'localhost' IDENTIFIED BY '$NEWPASSWORD';
+#   FLUSH PRIVILEGES;
+#   " | mysql --connect-expired-password --socket=$MYSQL_SOCKET -u root -p$(grep -oP "temporary password is generated for root@localhost: \K.*" $MYSQL_LOG/error.log)
+#   echo "[IMQA] MySQL password is changed"
+#   # check if changed password is correct
+#   mysql --socket=$MYSQL_SOCKET -u root -p$NEWPASSWORD -e "exit"
+#   if [ $? -eq 0 ]; then
+#     echo "[IMQA] MySQL password is correct"
+#     # Create new user for mysql
+#     read -p "Enter your new mysql username (default imqa): " NEWUSERNAME
+#     if [ -z "$NEWUSERNAME" ]; then
+#       NEWUSERNAME="imqa"
+#     fi
+#     read -p "Enter your new mysql user password (default 1234): " NEWUSERPASSWORD
+#     if [ -z "$NEWUSERPASSWORD" ]; then
+#       NEWUSERPASSWORD="1234"
+#     fi
+#     read -p "Enter yout new mysql user host (default %): " NEWUSERHOST
+#     if [ -z "$NEWUSERHOST" ]; then
+#       NEWUSERHOST="%"
+#     fi
+#     echo "use mysql;
+#     CREATE USER '$NEWUSERNAME'@'$NEWUSERHOST' IDENTIFIED BY '$NEWUSERPASSWORD';
+#     GRANT ALL PRIVILEGES ON *.* TO '$NEWUSERNAME'@'$NEWUSERHOST' WITH GRANT OPTION;
+#     FLUSH PRIVILEGES;
+#     " | mysql --socket=$MYSQL_SOCKET -u root -p$NEWPASSWORD
+#     # Check if new user is created
+#     mysql --socket=$MYSQL_SOCKET -u $NEWUSERNAME -p$NEWUSERPASSWORD -e "exit"
+#     if [ $? -eq 0 ]; then
+#       echo "[IMQA] MySQL user is created"
+#     else
+#       echo "[IMQA] MySQL user is not created"
+#       echo "try following command to create user"
+#       echo "CREATE USER '$NEWUSERNAME'@'$NEWUSERHOST' IDENTIFIED BY '$NEWUSERPASSWORD';"
+#       echo "GRANT ALL PRIVILEGES ON *.* TO '$NEWUSERNAME'@'$NEWUSERHOST' WITH GRANT OPTION;"
+#       echo "FLUSH PRIVILEGES;"
+#     fi
+#   else
+#     echo "[IMQA] MySQL password is incorrect"
+#   fi
+# fi
 
 
 echo "[IMQA] MySQL configuration is done"
