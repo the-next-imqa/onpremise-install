@@ -118,8 +118,8 @@ if [ $(confirm "Do you want to configure RabbitMQ?") -eq "1" ]; then
       echo "[IMQA] RabbitMQ is running"
       sh script/config_rabbitmq.sh
       echo "[IMQA] Enabling and starting RabbitMQ"
-      systemctl enable rabbitmq
-      systemctl restart rabbitmq
+      systemctl enable rabbitmq-server
+      systemctl restart rabbitmq-server
     else
       echo "[IMQA] RabbitMQ is not running"
     fi

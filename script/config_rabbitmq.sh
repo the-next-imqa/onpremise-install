@@ -34,5 +34,3 @@ fi
 
 echo "[IMQA] RabbitMQ configuration is done"
 echo "[IMQA] RabbitMQ restart"
-systemctl enable rabbitmq-server
-systemctl restart rabbitmq-server
