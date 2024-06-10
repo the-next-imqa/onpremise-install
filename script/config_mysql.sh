@@ -105,6 +105,10 @@ fi
 if [ ! -d "$MYSQL_LOG" ]; then
   mkdir -p $MYSQL_LOG
   chown -R mysql:mysql $MYSQL_LOG
+else
+  rm -rf $MYSQL_LOG/*
+  mkdir -p $MYSQL_LOG
+  chown -R mysql:mysql $MYSQL_LOG
 fi
 
 # Check if mysql data path is changed
@@ -113,7 +117,6 @@ echo "[IMQA] Re-initializing MySQL"
 systemctl stop mysqld
 rm -rf $MYSQL_DATA/*
 mkdir -p $MYSQL_DATA
-rm -rf $MYSQL_LOG/*
 systemctl start mysqld
 # wait for mysql to start appox 40sec
 sleep 40
