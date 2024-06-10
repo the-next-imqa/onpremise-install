@@ -143,14 +143,14 @@ if [ $(confirm "Do you want to configure MySQL?") -eq "1" ]; then
     if [ $(systemctl is-active mysql) == "active" ]; then
       echo "[IMQA] MySQL is running"
       echo "[IMQA] Stopping MySQL"
-      systemctl stop mysql
+      systemctl stop mysqld
     else
       echo "[IMQA] MySQL is not running"
     fi
     sh script/config_mysql.sh
     echo "[IMQA] Enabling and starting MySQL"
-    systemctl enable mysql
-    systemctl restart mysql
+    systemctl enable mysqld
+    systemctl restart mysqld
   fi
 else
   echo "[IMQA] Skipping MySQL configuration"

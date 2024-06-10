@@ -92,8 +92,7 @@ symbolic-links=0
 
 [client]
 default-character-set=utf8mb4
-!includedir /etc/mysql/conf.d/
-!includedir /etc/mysql/mysql.conf.d/
+!includedir /etc/mysql.conf.d/
 " | tee -a $MYSQL_CONFIG/my.cnf > /dev/null
 
 # Check if mysql data path is changed
@@ -103,10 +102,10 @@ if [ "$MYSQL_ORIGINAL_DATA" != "$MYSQL_DATA" ]; then
   read -p "Do you want to re-initialize MySQL? [y/n] : " REINITIALIZE
   if [ "$REINITIALIZE" == "y" ]; then
     echo "[IMQA] Re-initializing MySQL"
-    systemctl stop mysql
+    systemctl stop mysqld
     rm -rf $MYSQL_DATA/*
     mkdir -p $MYSQL_DATA
-    systemctl start mysql
+    systemctl start mysqld
     # wait for mysql to start appox 40sec
     sleep 40
     echo "[IMQA] Your mysql temporary password is: $(grep -oP "temporary password is generated for root@localhost: \K.*" $MYSQL_LOG/error.log)"
@@ -161,11 +160,11 @@ if [ "$MYSQL_ORIGINAL_DATA" != "$MYSQL_DATA" ]; then
     fi
   else
     echo "[IMQA] Stopping MySQL"
-    systemctl stop mysql
+    systemctl stop mysqld
     echo "[IMQA] Moving MySQL data"
     mv $MYSQL_ORIGINAL_DATA $MYSQL_DATA
     echo "[IMQA] Starting MySQL"
-    systemctl start mysql
+    systemctl start mysqld
   fi
 else 
   echo "[IMQA] MySQL data path is not changed"
