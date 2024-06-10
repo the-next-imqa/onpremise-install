@@ -36,8 +36,8 @@ fi
 
 export REDIS_PORT REDIS_PASSWORD REDIS_LOG_PATH REDIS_CONFIG
 
-cat redis.conf.template | envsubst > $REDIS_CONFIG/redis.conf
-cat redis.service.template | envsubst > /usr/lib/systemd/system/redis.service
+cat template/redis.conf.template | envsubst > $REDIS_CONFIG/redis.conf
+cat template/redis.service.template | envsubst > /usr/lib/systemd/system/redis.service
 
 # if redis port is not 6379, update selinux port
 if [ "$REDIS_PORT" != "6379" ]; then
