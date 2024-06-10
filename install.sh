@@ -118,10 +118,6 @@ if [ $(confirm "Do you want to install NVM with Node12 & Node18?") -eq "1" ]; th
       echo "Installing nvm from $NVM_PACKAGE_FILE"
       tar -xJvf "$NVM_PACKAGE_FILE" -C $HOME
       sh $HOME/.nvm/install.sh
-      sed -i "/$NVM_EXPORT/d" $BASHRC
-      echo -e $NVM_EXPORT >> $BASHRC
-      echo "All setup"
-      echo "Reload bash profile `source ~/.bashrc`"
     else
       echo "$NVM_PACKAGE_FILE is not exist in $HOME"
       exit 1
@@ -129,6 +125,10 @@ if [ $(confirm "Do you want to install NVM with Node12 & Node18?") -eq "1" ]; th
   else
     echo "[IMQA] NVM already installed"
   fi
+  sed -i "/$NVM_EXPORT/d" $BASHRC
+  echo -e $NVM_EXPORT >> $BASHRC
+  echo "All setup"
+  echo "Reload bash profile `source ~/.bashrc`"
 fi
 
 echo "[IMQA] Installation Done"
