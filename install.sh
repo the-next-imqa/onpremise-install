@@ -94,7 +94,7 @@ fi
 
 echo "[IMQA] Installing docker-ce"
 if [ $(confirm "Do you want to install docker-ce?") -eq "1" ]; then
-  yum --disablerepo=\* --enablerepo=offline-imqa install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
+  yum --disablerepo=\* --enablerepo=offline-imqa --nobest install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
   # systemctl enable docker
   # systemctl start docker
 fi
