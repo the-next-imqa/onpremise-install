@@ -132,6 +132,7 @@ dist
 .pnp.*
 
 # files
+.DS_Store
 nodejs
 pm2
 !tar*.rpm
