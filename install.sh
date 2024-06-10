@@ -1,13 +1,14 @@
 #!/usr/bin/env bash
 
-function confirm {
-  while true
-  do
+confirm() {
+  local yn
+  while true; do
     read -p "$1 [y/N] : " yn
     yn=${yn:-n}
-    case $yn in
-      [Yy] ) echo "1"; break;;
-      [Nn] ) echo "0"; break;;
+    case "$yn" in
+      [Yy]*) echo "1"; return;;
+      [Nn]*) echo "0"; return;;
+      *) echo "Invalid input. Please enter 'y' or 'n'.";;
     esac
   done
 }
