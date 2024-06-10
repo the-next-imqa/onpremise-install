@@ -92,7 +92,6 @@ symbolic-links=0
 
 [client]
 default-character-set=utf8mb4
-!includedir /etc/mysql.conf.d/
 " | tee -a $MYSQL_CONFIG/my.cnf > /dev/null
 
 # if mysql port is not 3306, update selinux port
