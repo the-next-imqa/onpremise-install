@@ -18,8 +18,6 @@ fi
 
 echo "[IMQA] Installing Redis"
 read -p "Enter the full path of redis config path: " REDIS_CONFIG
-cp $REDIS_CONFIG/redis.conf $REDIS_CONFIG/redis.conf.bak
-rm -rf $REDIS_CONFIG/redis.conf
 read -p "Enter Redis port (default 6379): " REDIS_PORT
 read -p "Enter Redis password (default 1234): " REDIS_PASSWORD
 read -p "Enter Redis log path (default /var/log/redis/redis-server.log): " REDIS_LOG_PATH
