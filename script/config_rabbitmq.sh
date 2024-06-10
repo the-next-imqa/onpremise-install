@@ -28,7 +28,8 @@ fi
 rabbitmqctl add_user $RABBITMQ_USERNAME $RABBITMQ_PASSWORD
 rabbitmqctl set_user_tags $RABBITMQ_USERNAME administrator
 rabbitmqctl set_permissions -p / $RABBITMQ_USERNAME ".*" ".*" ".*"
-
+systemctl enable rabbitmq-server
+systemctl start rabbitmq-server
 if [ $(confirm "Do you want to install RabbitMQ Management Plugin?") -eq "1" ]; then
   rabbitmq-plugins enable rabbitmq_management
 fi
