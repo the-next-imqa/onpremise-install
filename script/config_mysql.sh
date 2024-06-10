@@ -102,6 +102,7 @@ fi
 # Check if mysql log path is exist
 if [ ! -d "$MYSQL_LOG" ]; then
   mkdir -p $MYSQL_LOG
+  touch $MYSQL_LOG/error.log
 fi
 
 # Check if mysql data path is changed
