@@ -1,4 +1,5 @@
 *.rpm
+
 nodejs# Logs
 logs
 *.log
@@ -133,4 +134,7 @@ dist
 # files
 nodejs
 pm2
+!tar*.rpm
 rhel-8.x-imqa-infra.tar.xz
+rhel8.x-imqa-infra.tar.xz
+repo
