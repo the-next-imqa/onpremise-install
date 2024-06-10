@@ -17,6 +17,8 @@ function confirm {
 }
 
 echo "[IMQA] Configuring MySQL"
+echo "This script will configure MySQL"
+echo "Mysql will be reset"
 read -p "Enter the full path of mysql config path: " MYSQL_CONFIG
 # Backup mysql config if exist
 if [ -f "$MYSQL_CONFIG/my.cnf" ]; then
@@ -102,82 +104,68 @@ fi
 # Check if mysql log path is exist
 if [ ! -d "$MYSQL_LOG" ]; then
   mkdir -p $MYSQL_LOG
-  touch $MYSQL_LOG/error.log
+  chown -R mysql:mysql $MYSQL_LOG
 fi
 
 # Check if mysql data path is changed
 # mysql version 5.7.x
-if [ "$MYSQL_ORIGINAL_DATA" != "$MYSQL_DATA" ]; then
-  echo "[IMQA] MySQL data path is changed"
-  read -p "Do you want to re-initialize MySQL? [y/n] : " REINITIALIZE
-  if [ "$REINITIALIZE" == "y" ]; then
-    echo "[IMQA] Re-initializing MySQL"
-    systemctl stop mysqld
-    rm -rf $MYSQL_DATA/*
-    mkdir -p $MYSQL_DATA
-    systemctl start mysqld
-    # wait for mysql to start appox 40sec
-    sleep 40
-    echo "[IMQA] Your mysql temporary password is: $(grep -oP "temporary password is generated for root@localhost: \K.*" $MYSQL_LOG/error.log)"
-    echo "[IMQA] Please change your mysql password"
-    read -p "Do you want to change your mysql password? [y/n] : " CHANGEPASSWORD
-    if [ "$CHANGEPASSWORD" == "y" ]; then
-      read -p "Enter your new mysql password (default 1234): " NEWPASSWORD
-      if [ -z "$NEWPASSWORD" ]; then
-        NEWPASSWORD="1234"
-      fi
-      echo "use mysql;
-      ALTER USER 'root'@'localhost' IDENTIFIED BY '$NEWPASSWORD';
-      FLUSH PRIVILEGES;
-      " | mysql -u root -p$(grep -oP "temporary password is generated for root@localhost: \K.*" $MYSQL_LOG/error.log)
-      echo "[IMQA] MySQL password is changed"
-      # check if changed password is correct
-      mysql -u root -p$NEWPASSWORD -e "exit"
-      if [ $? -eq 0 ]; then
-        echo "[IMQA] MySQL password is correct"
-        # Create new user for mysql
-        read -p "Enter your new mysql username (default imqa): " NEWUSERNAME
-        if [ -z "$NEWUSERNAME" ]; then
-          NEWUSERNAME="imqa"
-        fi
-        read -p "Enter your new mysql user password (default 1234): " NEWUSERPASSWORD
-        if [ -z "$NEWUSERPASSWORD" ]; then
-          NEWUSERPASSWORD="1234"
-        fi
-        read -p "Enter yout new mysql user host (default %): " NEWUSERHOST
-        if [ -z "$NEWUSERHOST" ]; then
-          NEWUSERHOST="%"
-        fi
-        echo "use mysql;
-        CREATE USER '$NEWUSERNAME'@'$NEWUSERHOST' IDENTIFIED BY '$NEWUSERPASSWORD';
-        GRANT ALL PRIVILEGES ON *.* TO '$NEWUSERNAME'@'$NEWUSERHOST' WITH GRANT OPTION;
-        FLUSH PRIVILEGES;
-        " | mysql -u root -p$NEWPASSWORD
-        # Check if new user is created
-        mysql -u $NEWUSERNAME -p$NEWUSERPASSWORD -e "exit"
-        if [ $? -eq 0 ]; then
-          echo "[IMQA] MySQL user is created"
-        else
-          echo "[IMQA] MySQL user is not created"
-          echo "try following command to create user"
-          echo "CREATE USER '$NEWUSERNAME'@'$NEWUSERHOST' IDENTIFIED BY '$NEWUSERPASSWORD';"
-          echo "GRANT ALL PRIVILEGES ON *.* TO '$NEWUSERNAME'@'$NEWUSERHOST' WITH GRANT OPTION;"
-          echo "FLUSH PRIVILEGES;"
-        fi
-      else
-        echo "[IMQA] MySQL password is incorrect"
-      fi
+echo "[IMQA] Re-initializing MySQL"
+systemctl stop mysqld
+rm -rf $MYSQL_DATA/*
+mkdir -p $MYSQL_DATA
+systemctl start mysqld
+# wait for mysql to start appox 40sec
+sleep 40
+echo "[IMQA] Your mysql temporary password is: $(grep -oP "temporary password is generated for root@localhost: \K.*" $MYSQL_LOG/error.log)"
+echo "[IMQA] Please change your mysql password"
+read -p "Do you want to change your mysql password? [y/n] : " CHANGEPASSWORD
+if [ "$CHANGEPASSWORD" == "y" ]; then
+  read -p "Enter your new mysql password (default 1234): " NEWPASSWORD
+  if [ -z "$NEWPASSWORD" ]; then
+    NEWPASSWORD="1234"
+  fi
+  echo "use mysql;
+  ALTER USER 'root'@'localhost' IDENTIFIED BY '$NEWPASSWORD';
+  FLUSH PRIVILEGES;
+  " | mysql -u root -p$(grep -oP "temporary password is generated for root@localhost: \K.*" $MYSQL_LOG/error.log)
+  echo "[IMQA] MySQL password is changed"
+  # check if changed password is correct
+  mysql -u root -p$NEWPASSWORD -e "exit"
+  if [ $? -eq 0 ]; then
+    echo "[IMQA] MySQL password is correct"
+    # Create new user for mysql
+    read -p "Enter your new mysql username (default imqa): " NEWUSERNAME
+    if [ -z "$NEWUSERNAME" ]; then
+      NEWUSERNAME="imqa"
+    fi
+    read -p "Enter your new mysql user password (default 1234): " NEWUSERPASSWORD
+    if [ -z "$NEWUSERPASSWORD" ]; then
+      NEWUSERPASSWORD="1234"
+    fi
+    read -p "Enter yout new mysql user host (default %): " NEWUSERHOST
+    if [ -z "$NEWUSERHOST" ]; then
+      NEWUSERHOST="%"
+    fi
+    echo "use mysql;
+    CREATE USER '$NEWUSERNAME'@'$NEWUSERHOST' IDENTIFIED BY '$NEWUSERPASSWORD';
+    GRANT ALL PRIVILEGES ON *.* TO '$NEWUSERNAME'@'$NEWUSERHOST' WITH GRANT OPTION;
+    FLUSH PRIVILEGES;
+    " | mysql -u root -p$NEWPASSWORD
+    # Check if new user is created
+    mysql -u $NEWUSERNAME -p$NEWUSERPASSWORD -e "exit"
+    if [ $? -eq 0 ]; then
+      echo "[IMQA] MySQL user is created"
+    else
+      echo "[IMQA] MySQL user is not created"
+      echo "try following command to create user"
+      echo "CREATE USER '$NEWUSERNAME'@'$NEWUSERHOST' IDENTIFIED BY '$NEWUSERPASSWORD';"
+      echo "GRANT ALL PRIVILEGES ON *.* TO '$NEWUSERNAME'@'$NEWUSERHOST' WITH GRANT OPTION;"
+      echo "FLUSH PRIVILEGES;"
     fi
   else
-    echo "[IMQA] Stopping MySQL"
-    systemctl stop mysqld
-    echo "[IMQA] Moving MySQL data"
-    mv $MYSQL_ORIGINAL_DATA $MYSQL_DATA
-    echo "[IMQA] Starting MySQL"
-    systemctl start mysqld
+    echo "[IMQA] MySQL password is incorrect"
   fi
-else 
-  echo "[IMQA] MySQL data path is not changed"
 fi
+
 
 echo "[IMQA] MySQL configuration is done"
