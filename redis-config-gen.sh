@@ -9,4 +9,5 @@ cat redis.conf.template | envsubst > redis.conf
 cat redis.service.template | envsubst > redis.service
 
 # TODO: Copy redis.service to /usr/lib/systemd/system/redis.service
-# systemctl enable redis.service
+# systemctl enable redis.service or systemctl reload redis.service
+
