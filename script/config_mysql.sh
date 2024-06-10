@@ -99,6 +99,11 @@ if [ "$MYSQL_PORT" != "3306" ]; then
   semanage port -a -t mysqld_port_t -p tcp $MYSQL_PORT
 fi
 
+# Check if mysql log path is exist
+if [ ! -d "$MYSQL_LOG" ]; then
+  mkdir -p $MYSQL_LOG
+fi
+
 # Check if mysql data path is changed
 # mysql version 5.7.x
 if [ "$MYSQL_ORIGINAL_DATA" != "$MYSQL_DATA" ]; then
