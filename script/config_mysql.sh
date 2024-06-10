@@ -113,6 +113,7 @@ echo "[IMQA] Re-initializing MySQL"
 systemctl stop mysqld
 rm -rf $MYSQL_DATA/*
 mkdir -p $MYSQL_DATA
+rm -rf $MYSQL_LOG/*
 systemctl start mysqld
 # wait for mysql to start appox 40sec
 sleep 40
@@ -130,7 +131,7 @@ if [ "$CHANGEPASSWORD" == "y" ]; then
   " | mysql --socket=$MYSQL_SOCKET -u root -p$(grep -oP "temporary password is generated for root@localhost: \K.*" $MYSQL_LOG/error.log)
   echo "[IMQA] MySQL password is changed"
   # check if changed password is correct
-  mysql -u root -p$NEWPASSWORD -e "exit"
+  mysql --socket=$MYSQL_SOCKET -u root -p$NEWPASSWORD -e "exit"
   if [ $? -eq 0 ]; then
     echo "[IMQA] MySQL password is correct"
     # Create new user for mysql
@@ -152,7 +153,7 @@ if [ "$CHANGEPASSWORD" == "y" ]; then
     FLUSH PRIVILEGES;
     " | mysql --socket=$MYSQL_SOCKET -u root -p$NEWPASSWORD
     # Check if new user is created
-    mysql -u $NEWUSERNAME -p$NEWUSERPASSWORD -e "exit"
+    mysql --socket=$MYSQL_SOCKET -u $NEWUSERNAME -p$NEWUSERPASSWORD -e "exit"
     if [ $? -eq 0 ]; then
       echo "[IMQA] MySQL user is created"
     else
