@@ -113,7 +113,7 @@ if [ $(confirm "Do you want to install NVM with Node12 & Node18?") -eq "1" ]; th
   NVM_EXPORT='export NVM_DIR="$HOME/.nvm"
   [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
   [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion'
-  if [ ! -d "$PWD/.nvm" ]; then
+  if [ ! -d "$HOME/.nvm" ]; then
     if [ -f "$NVM_PACKAGE_FILE" ]; then
       echo "Installing nvm from $NVM_PACKAGE_FILE"
       tar -xJvf "$NVM_PACKAGE_FILE" -C $HOME
