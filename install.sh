@@ -128,9 +128,8 @@ if [ $(confirm "Do you want to install NVM with Node12 & Node18?") -eq "1" ]; th
   sed -i "/$NVM_EXPORT/d" $BASHRC
   echo -e $NVM_EXPORT >> $BASHRC
   echo "All setup"
-  echo "Reload bash profile `source ~/.bashrc`"
+  echo "Reload bash profile 'source ~/.bashrc'"
 fi
 
 echo "[IMQA] Installation Done"
-echo "Reloading bash profile `source ~/.bashrc`"
 echo "Please restart your terminal to apply changes"
