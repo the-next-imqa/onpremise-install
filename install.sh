@@ -6,9 +6,8 @@ confirm() {
     read -p "$1 [y/N] : " yn
     yn=${yn:-n}
     case "$yn" in
-      [Yy]*) echo "1"; return;;
-      [Nn]*) echo "0"; return;;
-      *) echo "Invalid input. Please enter 'y' or 'n'.";;
+      [Yy]* ) echo "1"; return;;
+      [Nn]* ) echo "0"; return;;
     esac
   done
 }
