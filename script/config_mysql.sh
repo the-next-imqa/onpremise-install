@@ -95,6 +95,11 @@ default-character-set=utf8mb4
 !includedir /etc/mysql.conf.d/
 " | tee -a $MYSQL_CONFIG/my.cnf > /dev/null
 
+# if mysql port is not 3306, update selinux port
+if [ "$MYSQL_PORT" != "3306" ]; then
+  semanage port -a -t mysqld_port_t -p tcp $MYSQL_PORT
+fi
+
 # Check if mysql data path is changed
 # mysql version 5.7.x
 if [ "$MYSQL_ORIGINAL_DATA" != "$MYSQL_DATA" ]; then

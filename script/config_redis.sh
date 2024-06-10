@@ -94,4 +94,9 @@ client-output-buffer-limit pubsub 32mb 8mb 60
 hz 10
 aof-rewrite-incremental-fsync yes" > $REDIS_CONFIG/redis.conf
 
+# if redis port is not 6379, update selinux port
+if [ "$REDIS_PORT" != "6379" ]; then
+  semanage port -a -t redis_port_t -p tcp $REDIS_PORT
+fi
+
 echo "[IMQA] Redis configuration is done"
