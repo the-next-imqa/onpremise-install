@@ -373,3 +373,6 @@ echo "[IMQA] Nginx Config is created"
 echo "Please check the config files in $NGINX_CONF"
 echo "You can check the nginx config by running 'nginx -t'"
 echo "[IMQA] Nginx configuration is done"
+echo "[IMQA] Ngnix restart"
+systemctl enable nginx
+systemctl restart nginx
