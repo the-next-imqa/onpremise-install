@@ -44,7 +44,7 @@ if [ "$REDIS_PORT" != "6379" ]; then
   semanage port -a -t redis_port_t -p tcp $REDIS_PORT
 fi
 
-systemctl reload redis.service
+systemctl daemon-reload redis.service
 systemctl restart redis.service
 
 echo "[IMQA] Redis configuration is done"
