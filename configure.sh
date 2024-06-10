@@ -116,13 +116,15 @@ if [ $(confirm "Do you want to configure RabbitMQ?") -eq "1" ]; then
     # Check if rabbitmq is running
     if [ $(systemctl is-active rabbitmq-server) == "active" ]; then
       echo "[IMQA] RabbitMQ is running"
-      sh script/config_rabbitmq.sh
-      echo "[IMQA] Enabling and starting RabbitMQ"
-      systemctl enable rabbitmq-server
-      systemctl restart rabbitmq-server
     else
       echo "[IMQA] RabbitMQ is not running"
+      echo "[IMQA] Starting RabbitMQ to initialize configuration"
+      systemctl start rabbitmq-server
     fi
+    sh script/config_rabbitmq.sh
+    echo "[IMQA] Enabling and starting RabbitMQ"
+    systemctl enable rabbitmq-server
+    systemctl restart rabbitmq-server
   fi
 else
   echo "[IMQA] Skipping RabbitMQ configuration"
