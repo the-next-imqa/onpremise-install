@@ -138,3 +138,4 @@ pm2
 !tar*.rpm
 rhel8.x-imqa-packages.tar.xz
 repo
+imqa-packages*.tar.gz
