@@ -1,0 +1,36 @@
+[Unit]
+Description=MySQL Server (IMQA)
+Documentation=man:mysqld(8)
+Documentation=http://dev.mysql.com/doc/refman/en/using-systemd.html
+After=network.target
+After=syslog.target
+
+[Install]
+WantedBy=multi-user.target
+
+[Service]
+Type=forking
+
+PIDFile=/home/test/mysql/mysqld.pid
+
+# Disable service start and stop timeout logic of systemd for mysqld service.
+TimeoutSec=0
+
+# Execute pre and post scripts as root
+PermissionsStartOnly=true
+# Environment file
+EnvironmentFile=/home/test/.config/systemd/user/mysqld@imqa
+# Needed to create system tables
+ExecStartPre=/home/test/.sbin/mysqld --initialize --basedir=/home/test/mysql --datadir=/home/test/mysql/data --log-error=/home/test/mysql/data/mysql.err --pid-file=/home/test/mysql/mysqld.pid --socket=/home/test/mysql/mysql.sock $MYSQLD_OPTS
+
+# Start main service
+ExecStart=/home/test/.sbin/mysqld --daemonize --basedir=/home/test/mysql --datadir=/home/test/mysql/data --log-error=/home/test/mysql/data/mysql.err --pid-file=/home/test/mysql/mysqld.pid --socket=/home/test/mysql/mysql.sock $MYSQLD_OPTS
+
+# Sets open_files_limit
+LimitNOFILE = 5000
+
+Restart=on-failure
+
+RestartPreventExitStatus=1
+
+PrivateTmp=false
