@@ -13,6 +13,7 @@ export REDIS_CONFIG=$(read_input "Enter the full path of redis config path: " "$
 export REDIS_PORT=$(read_input "Enter Redis port" "6379")
 export REDIS_PASSWORD=$(read_input "Enter Redis password", "1234")
 export REDIS_LOG_PATH=$(read_input "Enter Redis log path", "$REDIS_BASE_PATH/redis-server.log")
+export REDIS_PID_PATH=$(read_input "Enter Redis pid path", "$REDIS_BASE_PATH/redis-server.pid")
 
 echo "Registering MySQL service system daemon of non-sudo user"
 
