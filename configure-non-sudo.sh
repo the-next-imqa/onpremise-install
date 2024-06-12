@@ -15,11 +15,11 @@ confirm() {
     read -p "$1 [y/N] : " yn
     yn=${yn:-n}
     case "$yn" in
-    [Yy]*)
-      return 1
+    [Yy]*) 
+      return 0
       ;;
     [Nn]*)
-      return 0
+      return 1
       ;;
     esac
   done
