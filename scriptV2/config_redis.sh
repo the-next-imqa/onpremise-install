@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-REDIS_BASE_PATH="$HOME/redis"
+export REDIS_BASE_PATH="$HOME/redis"
 REDIS_CONFIG_FILE="redis.conf"
 REDIS_CONFIG_FILE_PATH="$PWD/template/redis/$REDIS_CONFIG_FILE"
 REDIS_SERVICE_FILE="redis@imqa.service"
