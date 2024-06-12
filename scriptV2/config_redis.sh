@@ -1,50 +1,38 @@
 #!/usr/bin/env bash
 
-function confirm {
-  while true
-  do
-    read -p "$1 [y/n] : " yn
-    case $yn in
-      [Yy] ) echo "1"; break;;
-      [Nn] ) echo "0"; break;;
-    esac
-  done
-}
+REDIS_BASE_PATH="$HOME/redis"
+REDIS_CONFIG_FILE="redis.conf"
+REDIS_CONFIG_FILE_PATH="$PWD/template/redis/$REDIS_CONFIG_FILE"
+REDIS_SERVICE_FILE="redis@imqa.service"
+REDIS_SERVICE_FILE_PATH="$PWD/template/redis/$REDIS_SERVICE_FILE"
 
-if [ "$EUID" -ne 0 ]
-  then echo "Please run as root"
-  exit
+create_dir "$REDIS_BASE_PATH"
+
+echo "[IMQA] Registering Redis service to system daemon as non-sudo user"
+export REDIS_CONFIG=$(read_input "Enter the full path of redis config path: " "$HOME/redis")
+export REDIS_PORT=$(read_input "Enter Redis port" "6379")
+export REDIS_PASSWORD=$(read_input "Enter Redis password", "1234")
+export REDIS_LOG_PATH=$(read_input "Enter Redis log path", "$HOME/redis-server.log")
+
+echo "Registering MySQL service system daemon of non-sudo user"
+
+if [ -f "$REDIS_SERVICE_FILE_PATH" ]; then
+  echo "Copying executable binary to $SBIN_DIR..."
+  cp "/usr/bin/redis-server" "$SBIN_DIR/"
+  cp "/usr/libexec/redis-shutdown" "$SBIN_DIR/"
+  echo "Templating $REDIS_SERVICE_FILE_PATH"
+  envsubst <"$REDIS_SERVICE_FILE_PATH" >"$USER_DIR/$REDIS_SERVICE_FILE"
+  echo "Templating $REDIS_CONFIG_FILE_PATH"
+  envsubst <"$REDIS_CONFIG_FILE_PATH" >"$REDIS_BASE_PATH/$REDIS_CONFIG_FILE"
+  systemctl --user daemon-reload
+  systemctl --user enable redis@imqa
+  systemctl --user restart redis@imqa
+else
+  echo "Service file $REDIS_SERVICE_FILE_PATH not found!"
+  exit 1
 fi
 
-echo "[IMQA] Installing Redis"
-read -p "Enter the full path of redis config path: " REDIS_CONFIG
-read -p "Enter Redis port (default 6379): " REDIS_PORT
-read -p "Enter Redis password (default 1234): " REDIS_PASSWORD
-read -p "Enter Redis log path (default /var/log/redis/redis-server.log): " REDIS_LOG_PATH
-# if redis log path is null, set default path
-if [ -z "$REDIS_LOG_PATH" ]; then
-  REDIS_LOG_PATH="/var/log/redis/redis-server.log"
-fi
-# if redis port is null, set default port
-if [ -z "$REDIS_PORT" ]; then
-  REDIS_PORT="6379"
-fi
-# if redis password is null, set default password
-if [ -z "$REDIS_PASSWORD" ]; then
-  REDIS_PASSWORD="1234"
-fi
-
-export REDIS_PORT REDIS_PASSWORD REDIS_LOG_PATH REDIS_CONFIG
-
-cat template/redis.conf.template | envsubst > $REDIS_CONFIG/redis.conf
-cat template/redis.service.template | envsubst > /usr/lib/systemd/system/redis.service
-
-# if redis port is not 6379, update selinux port
-if [ "$REDIS_PORT" != "6379" ]; then
-  semanage port -a -t redis_port_t -p tcp $REDIS_PORT
-fi
-
-systemctl daemon-reload redis.service
-systemctl restart redis.service
-
-echo "[IMQA] Redis configuration is done"
+# # if redis port is not 6379, update selinux port
+# if [ "$REDIS_PORT" != "6379" ]; then
+#   semanage port -a -t redis_port_t -p tcp $REDIS_PORT
+# fi
