@@ -12,7 +12,7 @@ echo "[IMQA] Registering Redis service to system daemon as non-sudo user"
 export REDIS_CONFIG=$(read_input "Enter the full path of redis config path: " "$HOME/redis")
 export REDIS_PORT=$(read_input "Enter Redis port" "6379")
 export REDIS_PASSWORD=$(read_input "Enter Redis password", "1234")
-export REDIS_LOG_PATH=$(read_input "Enter Redis log path", "$HOME/redis-server.log")
+export REDIS_LOG_PATH=$(read_input "Enter Redis log path", "$REDIS_BASE_PATH/redis-server.log")
 
 echo "Registering MySQL service system daemon of non-sudo user"
 
