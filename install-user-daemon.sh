@@ -111,17 +111,25 @@ if [ $(confirm "Do you want to register MySQL service as non-root user? ($(whoam
   if [ -z "$MAX_CONNECTIONS" ]; then
     export MAX_CONNECTIONS=500
   fi
-  echo "Copying MySQL service system daemon to user land"
+  echo "Registering MySQL service system daemon of user land"
   if [ -f "$MYSQL_SERVICE_FILE_PATH" ]; then
     echo "Copying $MYSQL_SERVICE_FILE to $USER_DIR..."
     cp "$(which mysqld)" "$SBIN_DIR/"
+    echo "Templating $MYSQL_SERVICE_FILE_PATH"
     cat "$MYSQL_SERVICE_FILE_PATH" | envsubst >"$USER_DIR/$MYSQL_SERVICE_FILE"
+    echo "Templating $MYSQL_CONFIG_FILE_PATH"
     cat "$MYSQL_CONFIG_FILE_PATH" | envsubst >"$HOME/$MYSQL_CONFIG_FILE"
+    echo "[IMQA] Written MySQL config file: $HOME/$MYSQL_CONFIG_FILE"
+    echo "[IMQA] Please change MySQL config file name from /etc/my.cnf to /etc/my.cnf.bak as sudo"
+    echo "[IMQA] Then restart service: systemctl --user restart mysqld@imqa"
     cp "$MYSQL_SERVICE_ENV_FILE_PATH" "$USER_DIR/"
     cp "$MYSQL_PRE_SCRIPT_FILE_PATH" "$MYSQL_PRE_SCRIPT_PATH/"
     systemctl --user daemon-reload
     systemctl --user enable mysqld@imqa
     systemctl --user restart mysqld@imqa
+    sleep 5
+    echo "[IMQA] Your mysql temporary password is: $(grep -oP "temporary password is generated for root@localhost: \K.*" $MYSQL_LOG/error.log)"
+    echo "[IMQA] Please change your mysql password"
   else
     echo "Service file $MYSQL_SERVICE_FILE_PATH not found!"
     exit 1

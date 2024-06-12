@@ -24,7 +24,7 @@ EnvironmentFile=%h/.config/systemd/user/mysqld@imqa
 ExecStartPre=%h/.scripts/mysqld_pre_systemd --datadir=$MYSQL_DATA/data
 
 # Start main service
-ExecStart=%h/.sbin/mysqld --daemonize --basedir=$MYSQL_DATA --datadir=$MYSQL_DATA/data --log-error=$MYSQL_LOG/data/mysql.err --pid-file=$MYSQL_PID --socket=$MYSQL_SOCKET $MYSQLD_OPTS
+ExecStart=%h/.sbin/mysqld --daemonize --basedir=$MYSQL_DATA --datadir=$MYSQL_DATA/data --log-error=$MYSQL_LOG/error.log --pid-file=$MYSQL_PID --socket=$MYSQL_SOCKET $MYSQLD_OPTS
 
 # Sets open_files_limit
 LimitNOFILE = 5000

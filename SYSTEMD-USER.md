@@ -12,7 +12,7 @@ systemd는 사용자 제어 하에 서비스들을 관리할 수 있는 사용�
 grep UsePAM /etc/ssh/sshd_config 
 ```
 
-UsePam no 인 경우
+UsePam no 인 경우 yes로 변경
 
 ## systemd-journald
 
@@ -66,5 +66,13 @@ $ loginctl enable-linger username
 
 ### MySQL
 
-- `sudo mv /usr/sbin/mysqld $HOME/.sbin`
-- 
+주의: systemd/user 에서 `mysqld`만 `.sbin`에 복사해서 사용함. 나머지 실행 바이너리를 구동하려면 최초 설치시에 sudo 계정으로 MySQL을 설치해야함(단, 데몬 등록과 실행은 하지 않도록 함) 아니면 `rpm`을 풀어서 사용자 폴더에 설치해야함.
+
+- Base path: `$HOME/mysql`
+- Pre script: `$HOME/.scripts/mysqld_pre_systemd`
+- Config file: `$HOME/my.cnf`
+
+```sh
+systemctl --user start|stop|enable|restart|... mysqld@imqa
+```
+
