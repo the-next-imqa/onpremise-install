@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-if [ ! "$EUID" -ne 0 ]
+if [ "$EUID" == 0 ]
   then echo "Do not run as sudoer"
   exit
 fi
