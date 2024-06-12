@@ -15,7 +15,6 @@ if [ "$EUID" == 0 ]; then
   exit
 fi
 
-echo $PWD
 echo "[IMQA] Registering MySQL service to system daemon as non-sudo user"
 
 create_dir "$MYSQL_BASE_PATH"
@@ -28,7 +27,7 @@ export MYSQL_PORT=$(read_input "Enter the port of mysql" "3306")
 export INNODB_BUFFER_POOL_SIZE=$(read_input "Enter Initial innodb buffer pool size" "4G")
 export MAX_CONNECTIONS=$(read_input "Enter Max connections" "500")
 
-echo "Registering MySQL service system daemon of user land"
+echo "Registering MySQL service system daemon of non-sudo user"
 if [ -f "$MYSQL_SERVICE_FILE_PATH" ]; then
   echo "Copying $MYSQL_SERVICE_FILE to $USER_DIR..."
   cp "$(which mysqld)" "$SBIN_DIR/"
