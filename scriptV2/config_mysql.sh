@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
 
-MYSQL_BASE_PATH="$HOME/mysql"
+export MYSQL_BASE_PATH="$HOME/mysql"
 MYSQL_CONFIG_FILE="my.cnf"
 MYSQL_CONFIG_FILE_PATH="$PWD/template/mysql/$MYSQL_CONFIG_FILE"
 MYSQL_PRE_SCRIPT_FILE="mysqld_pre_systemd"
-MYSQL_PRE_SCRIPT_FILE_PATH="$PWD/template/mysql/$MYSQL_PRE_SCRIPT_FILE"
+MYSQL_PRE_SCRIPT_FILE_TEMPLATE="mysqld_pre_systemd_template"
+MYSQL_PRE_SCRIPT_FILE_TEMPLATE_PATH="$PWD/template/mysql/$MYSQL_PRE_SCRIPT_FILE_TEMPLATE"
 MYSQL_SERVICE_FILE="mysqld@imqa.service"
 MYSQL_SERVICE_FILE_PATH="$PWD/template/mysql/$MYSQL_SERVICE_FILE"
 MYSQL_SERVICE_ENV_FILE="mysqld@imqa"
@@ -39,7 +40,9 @@ if [ -f "$MYSQL_SERVICE_FILE_PATH" ]; then
   echo "[IMQA] Please change MySQL config file name from /etc/my.cnf to /etc/my.cnf.bak as sudo"
   echo "[IMQA] Then restart service: $(tput bold)systemctl --user restart mysqld@imqa$(tput sgr0)"
   cp "$MYSQL_SERVICE_ENV_FILE_PATH" "$USER_DIR/"
-  cp "$MYSQL_PRE_SCRIPT_FILE_PATH" "$SCRIPT_PATH/"
+  # cp "$MYSQL_PRE_SCRIPT_FILE_PATH" "$SCRIPT_PATH/"
+  # Pre-script template
+  envsubst < $MYSQL_PRE_SCRIPT_FILE_TEMPLATE_PATH | sed -e 's/$!/$/g' > "$SCRIPT_PATH/$MYSQL_PRE_SCRIPT_FILE"
   systemctl --user daemon-reload
   systemctl --user enable mysqld@imqa
   systemctl --user restart mysqld@imqa
