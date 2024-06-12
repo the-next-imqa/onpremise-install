@@ -114,14 +114,14 @@ if [ $(confirm "Do you want to register MySQL service as non-root user? ($(whoam
   echo "Copying MySQL service system daemon to user land"
   if [ -f "$MYSQL_SERVICE_FILE_PATH" ]; then
     echo "Copying $MYSQL_SERVICE_FILE to $USER_DIR..."
-    # cp "$(which mysqld)" "$SBIN_DIR/"
+    cp "$(which mysqld)" "$SBIN_DIR/"
     cat "$MYSQL_SERVICE_FILE_PATH" | envsubst >"$USER_DIR/$MYSQL_SERVICE_FILE"
     cat "$MYSQL_CONFIG_FILE_PATH" | envsubst >"$HOME/$MYSQL_CONFIG_FILE"
     cp "$MYSQL_SERVICE_ENV_FILE_PATH" "$USER_DIR/"
     cp "$MYSQL_PRE_SCRIPT_FILE_PATH" "$MYSQL_PRE_SCRIPT_PATH/"
-    # systemctl --user daemon-reload
-    # systemctl --user enable mysqld@imqa
-    # systemctl --user restart mysqld@imqa
+    systemctl --user daemon-reload
+    systemctl --user enable mysqld@imqa
+    systemctl --user restart mysqld@imqa
   else
     echo "Service file $MYSQL_SERVICE_FILE_PATH not found!"
     exit 1
