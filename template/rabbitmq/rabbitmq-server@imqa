@@ -1,3 +1,5 @@
 # Note: Windows-specific. This base directory contains sub-directories for the RabbitMQ server's database and log files. Instead of overriding RABBITMQ_MNESIA_BASE and RABBITMQ_LOG_BASE individually, it may be easier to override the base directory instead.
 RABBITMQ_BASE=$RABBITMQ_BASE
 RABBITMQ_CONFIG_FILES=$RABBITMQ_CONFIG_FILES
+RABBITMQ_MNESIA_BASE=$RABBITMQ_MNESIA_BASE
+RABBITMQ_LOG_BASE=$RABBITMQ_LOG_BASE

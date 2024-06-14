@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-DEFAULT_RABBITMQ_BASE_PATH="$HOME/rabbitmq"
+DEFAULT_RABBITMQ_BASE="$HOME/rabbitmq"
 RABBITMQ_SERVICE_FILE="rabbitmq-server@imqa.service"
 RABBITMQ_SERVICE_FILE_PATH="$PWD/template/rabbitmq/$RABBITMQ_SERVICE_FILE"
 RABBITMQ_SERVICE_ENV_FILE="rabbitmq-server@imqa"
@@ -19,15 +19,17 @@ encode_password() {
 }
 
 echo "[IMQA] Registering RabbitMQ service to system daemon as non-sudo user"
-export RABBITMQ_BASE_PATH=$(read_input "Enter the full path of RabbitMQ base path: " "$DEFAULT_RABBITMQ_BASE_PATH")
-export RABBITMQ_CONFIG_FILES=$(read_input "Enter the full path of RabbitMQ config path: " "$RABBITMQ_BASE_PATH/conf.d")
+export RABBITMQ_BASE=$(read_input "Enter the full path of RabbitMQ base path: " "$DEFAULT_RABBITMQ_BASE")
+export RABBITMQ_CONFIG_FILES=$(read_input "Enter the full path of RabbitMQ config path: " "$RABBITMQ_BASE/conf.d")
 export RABBITMQ_USERNAME=$(read_input "Enter the default username for RabbitMQ (default admin): ", "admin")
 export RABBITMQ_PASSWORD=$(read_input "Enter the default password for RabbitMQ (default 1234): ", "1234")
 export RABBITMQ_PASSWORD_HASH=$(encode_password $RABBITMQ_PASSWORD)
 
-export RABBITMQ_LOG_PATH=$RABBITMQ_BASE_PATH
+export RABBITMQ_LOG_BASE=$RABBITMQ_BASE
+export RABBITMQ_MNESIA_BASE=$RABBITMQ_MNESIA_BASE
 
-create_dir "$RABBITMQ_BASE_PATH"
+
+create_dir "$RABBITMQ_BASE"
 create_dir "$RABBITMQ_CONFIG_FILES"
 
 echo "Registering MySQL service system daemon of non-sudo user"
@@ -39,8 +41,8 @@ if [ -f "$RABBITMQ_SERVICE_FILE_PATH" ]; then
   envsubst <"$RABBITMQ_SERVICE_FILE_PATH" >"$USER_DIR/$RABBITMQ_SERVICE_FILE"
   echo "Templating $RABBITMQ_CONFIG"
   envsubst <"$RABBITMQ_CONFIG_PATH" >"$RABBITMQ_CONFIG_FILES/$RABBITMQ_CONFIG"
-  echo "Templating $RABBITMQ_CONFIG_DEFINITION_FILE_PATH"
-  envsubst <"$RABBITMQ_CONFIG_DEFINITION_FILE_PATH" >"$RABBITMQ_CONFIG_FILES/$RABBITMQ_CONFIG_DEFINITION_FILE"
+  # echo "Templating $RABBITMQ_CONFIG_DEFINITION_FILE_PATH"
+  # envsubst <"$RABBITMQ_CONFIG_DEFINITION_FILE_PATH" >"$RABBITMQ_CONFIG_FILES/$RABBITMQ_CONFIG_DEFINITION_FILE"
 
   systemctl --user daemon-reload
   systemctl --user enable rabbitmq-server@imqa
