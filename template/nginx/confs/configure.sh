@@ -69,8 +69,10 @@ handle_service() {
   fi
 }
 
+# usage: handle_service service_id service_name default_origin_port default_target_port default_cert default_key default_domain
+
 # WebAPI
-handle_service "webapi" "WebAPI" "3580" "80" "$NGINX_BASE_PATH/web_api.crt" "$NGINX_BASE_PATH/web_api.key" "api.imqa.io"
+handle_service "webapi" "WebAPI" "3580" "8000" "$NGINX_BASE_PATH/web_api.crt" "$NGINX_BASE_PATH/web_api.key" "api.imqa.io"
 
 # MPM
 handle_service "mpm" "MPM" "3180" "3081" "$NGINX_BASE_PATH/mpm.crt" "$NGINX_BASE_PATH/mpm.key" "mpm.imqa.io"
