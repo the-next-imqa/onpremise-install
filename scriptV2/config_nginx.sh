@@ -38,7 +38,7 @@ if [ -f "$NGINX_SERVICE_FILE_PATH" ]; then
   if confirm "Do you want to generate IMQA nginx conf files?"; then
     sh $NGINX_CONFD_SCRIPT
   fi
-
+  
   systemctl --user daemon-reload
   systemctl --user enable nginx@imqa
   systemctl --user restart nginx@imqa
