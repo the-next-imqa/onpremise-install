@@ -96,6 +96,6 @@ create_dir "$SCRIPT_PATH"
 handle_service "MySQL" "$CONFIGURE_MYSQL_SCRIPT" "mysql"
 handle_service "Redis" "$CONFIGURE_REDIS_SCRIPT" "redis"
 handle_service "RabbitMQ" "$CONFIGURE_RABBITMQ_SCRIPT" "rabbitmq"
-handle_service "NginX" "$CONFIGURE_NGINX_SCRIPT" "nginx
+handle_service "NginX" "$CONFIGURE_NGINX_SCRIPT" "nginx"
 
 echo "Script execution completed."
