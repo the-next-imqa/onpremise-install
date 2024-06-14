@@ -51,8 +51,3 @@ else
   echo "Service file $RABBITMQ_SERVICE_FILE_PATH not found!"
   exit 1
 fi
-
-# # if RABBITMQ port is not 6379, update selinux port
-# if [ "$RABBITMQ_PORT" != "6379" ]; then
-#   semanage port -a -t RABBITMQ_port_t -p tcp $RABBITMQ_PORT
-# fi
