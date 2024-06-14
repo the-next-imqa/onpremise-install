@@ -26,7 +26,7 @@ export RABBITMQ_PASSWORD=$(read_input "Enter the default password for RabbitMQ (
 export RABBITMQ_PASSWORD_HASH=$(encode_password $RABBITMQ_PASSWORD)
 
 export RABBITMQ_LOG_BASE=$RABBITMQ_BASE
-export RABBITMQ_MNESIA_BASE=$RABBITMQ_MNESIA_BASE
+export RABBITMQ_MNESIA_BASE=$RABBITMQ_BASE
 
 
 create_dir "$RABBITMQ_BASE"

@@ -31,7 +31,11 @@ LimitNOFILE=32768
 # https://www.rabbitmq.com/monitoring.html
 Restart=on-failure
 RestartSec=10
-EnvironmentFile=%h/.config/systemd/user/rabbitmq-server@imqa
+# EnvironmentFile=%h/.config/systemd/user/rabbitmq-server@imqa
+Environment=RABBITMQ_BASE=$RABBITMQ_BASE
+Environment=RABBITMQ_CONFIG_FILES=$RABBITMQ_CONFIG_FILES
+Environment=RABBITMQ_MNESIA_BASE=$RABBITMQ_MNESIA_BASE
+Environment=RABBITMQ_LOG_BASE=$RABBITMQ_LOG_BASE
 WorkingDirectory=%h/rabbitmq
 ExecStart=/usr/sbin/rabbitmq-server
 ExecStop=/usr/sbin/rabbitmqctl shutdown
