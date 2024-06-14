@@ -9,8 +9,8 @@ PIDFile=$NGINX_PID_PATH
 # SELinux context. This might happen when running `nginx -t` from the cmdline.
 # https://bugzilla.redhat.com/show_bug.cgi?id=1268621
 ExecStartPre=/usr/bin/rm -f $NGINX_PID_PATH
-ExecStartPre=%h/.sbin/nginx -c $NGINX_CONFIG -t
-ExecStart=%h/.sbin/nginx -c $NGINX_CONFIG
+ExecStartPre=%h/.sbin/nginx -e -c $NGINX_CONFIG -t
+ExecStart=%h/.sbin/nginx -e -c $NGINX_CONFIG
 ExecReload=/bin/kill -s HUP $!MAINPID
 KillSignal=SIGQUIT
 TimeoutStopSec=5
