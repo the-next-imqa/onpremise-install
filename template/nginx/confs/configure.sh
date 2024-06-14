@@ -1,31 +1,9 @@
 #!/usr/bin/env bash
 
 # using env from upstream
-NGINX_BASE_PATH # nginx base path
-NGINX_CONF_D_PATH # target
+# NGINX_BASE_PATH # nginx base path
+# NGINX_CONF_D_PATH # target
 NGINX_CONF_FILE_PATH="$PWD/template/nginx/confs"
-# Function to confirm user input
-confirm() {
-  local yn
-  while true; do
-    read -p "$1 [y/N] : " yn
-    yn=${yn:-n}
-    case "$yn" in
-      [Yy]*) return 0 ;;
-      [Nn]*) return 1 ;;
-    esac
-  done
-}
-
-# Function to read user input with a default value
-read_input() {
-  local prompt=$1
-  local default=$2
-  local var
-  read -p "$prompt (default $(tput bold)$default$(tput sgr0)): " var
-  echo "${var:-$default}"
-}
-
 
 function generate_conf {
   local template_file=$1
