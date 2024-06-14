@@ -2,6 +2,8 @@
 
 NGINX_SERVICE_FILE="nginx@imqa.service"
 NGINX_SERVICE_FILE_PATH="$PWD/template/nginx/$NGINX_SERVICE_FILE"
+NGINX_CONFIG_FILE="nginx.conf"
+NGINX_CONFIG_FILE_PATH="$PWD/template/nginx/$NGINX_CONFIG_FILE"
 
 if [ "$EUID" == 0 ]; then
   echo "Do not run as sudoer"
@@ -13,8 +15,6 @@ echo "[IMQA] Registering NGINX service to system daemon as non-sudo user"
 export NGINX_BASE_PATH=$(read_input "Enter the full path of Nginx base path" "$HOME/nginx")
 export NGINX_CONF_D_PATH=$(read_input "Enter the full path of Nginx conf.d path. Should end with trailing /" "$NGINX_BASE_PATH/conf.d/")
 
-export NGINX_CONFIG_FILE="$NGINX_BASE_PATH/nginx.conf"
-NGINX_CONFIG_FILE_PATH="$PWD/template/nginx/$NGINX_CONFIG_FILE"
 export NGINX_ERROR_LOG_PATH="$NGINX_BASE_PATH/error.log"
 export NGINX_PID_PATH="$NGINX_BASE_PATH/nginx.pid"
 export NGINX_DYNAMIC_MODULES_PATH="$NGINX_BASE_PATH/modules/*.conf"
@@ -29,8 +29,7 @@ if [ -f "$NGINX_SERVICE_FILE_PATH" ]; then
   echo "Templating $NGINX_SERVICE_FILE_PATH"
   envsubst <"$NGINX_SERVICE_FILE_PATH" >"$USER_DIR/$NGINX_SERVICE_FILE"
   echo "Templating $NGINX_CONFIG_FILE_PATH"
-  envsubst <"$NGINX_CONFIG_FILE_PATH" >"$NGINX_CONFIG_FILE"
-  echo "[IMQA] Written NGINX config file: $NGINX_CONFIG_FILE"
+  envsubst <"$NGINX_CONFIG_FILE_PATH" >"$NGINX_BASE_PATH/nginx.conf"
   systemctl --user daemon-reload
   systemctl --user enable nginx@imqa
   systemctl --user restart nginx@imqa
