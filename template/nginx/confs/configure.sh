@@ -14,8 +14,9 @@ function generate_conf {
   local ssl_cert=$6
   local ssl_key=$7
   local ssl_config=""
-
+  local ssl_header=""
   if [ -n "$ssl_cert" ] && [ -n "$ssl_key" ]; then
+    ssl_header="proxy_set_header X-Proto $ssl_header;"
     ssl_config=$(cat << EOF
     ssl on;
     ssl_certificate $ssl_cert;
@@ -34,6 +35,7 @@ EOF
   sed -e "s|\${NGINX_BASE_PATH}|$NGINX_BASE_PATH|g" \
       -e "s/\${ORIGIN_PORT}/$origin_port/g" \
       -e "s/\${TARGET_PORT}/$target_port/g" \
+      -e "s/\${SSL_HEADER}/$ssl_header/g" \
       -e "/\${SSL_CONFIG}/{
       r /dev/stdin
       d
