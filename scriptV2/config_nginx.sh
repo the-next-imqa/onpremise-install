@@ -18,6 +18,7 @@ export NGINX_CONF_D_PATH=$(read_input "Enter the full path of Nginx conf.d path.
 export NGINX_ERROR_LOG_PATH="$NGINX_BASE_PATH/error.log"
 export NGINX_PID_PATH="$NGINX_BASE_PATH/nginx.pid"
 export NGINX_DYNAMIC_MODULES_PATH="$NGINX_BASE_PATH/modules/*.conf"
+export NGINX_CONFIG="$NGINX_BASE_PATH/nginx.conf"
 
 create_dir "$NGINX_BASE_PATH"
 create_dir "$NGINX_CONF_D_PATH"
@@ -29,7 +30,7 @@ if [ -f "$NGINX_SERVICE_FILE_PATH" ]; then
   echo "Templating $NGINX_SERVICE_FILE_PATH"
   envsubst <"$NGINX_SERVICE_FILE_PATH" >"$USER_DIR/$NGINX_SERVICE_FILE"
   echo "Templating $NGINX_CONFIG_FILE_PATH"
-  envsubst <"$NGINX_CONFIG_FILE_PATH" >"$NGINX_BASE_PATH/nginx.conf"
+  envsubst <"$NGINX_CONFIG_FILE_PATH" | sed -e 's/$!/$/g' >"$NGINX_CONFIG"
   systemctl --user daemon-reload
   systemctl --user enable nginx@imqa
   systemctl --user restart nginx@imqa
