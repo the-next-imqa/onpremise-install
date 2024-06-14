@@ -50,7 +50,7 @@ if [ $(confirm "[IMQA] Installation Packages") -eq "0" ]; then
 fi
 
 echo "[IMQA] Installing Common Dependencies"
-yum --disablerepo=\* --enablerepo=offline-imqa install git
+yum --disablerepo=\* --enablerepo=offline-imqa install git vim-common
 
 echo "[IMQA] Installing nginx"
 if [ $(confirm "Do you want to install nginx?") -eq "1" ]; then

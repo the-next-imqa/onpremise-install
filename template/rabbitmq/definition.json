@@ -1,0 +1,41 @@
+{
+  "permissions": [
+    {
+      "configure": ".*",
+      "read": ".*",
+      "user": "$RABBITMQ_USERNAME",
+      "vhost": "/",
+      "write": ".*"
+    }
+  ],
+  "bindings": [],
+  "queues": [],
+  "parameters": [],
+  "policies": [],
+  "rabbitmq_version": "3.13.3",
+  "rabbit_version": "3.13.3",
+  "exchanges": [],
+  "users": [
+    {
+      "hashing_algorithm": "rabbit_password_hashing_sha256",
+      "limits": {},
+      "name": "$RABBITMQ_USERNAME",
+      "password_hash": "$RABBITMQ_PASSWORD_HASH",
+      "tags": [
+        "administrator"
+      ]
+    }
+  ],
+  "topic_permissions": [],
+  "vhosts": [
+    {
+      "limits": [],
+      "metadata": {
+        "description": "Default virtual host",
+        "tags": []
+      },
+      "name": "/"
+    }
+  ],
+  "global_parameters": []
+}

@@ -14,7 +14,7 @@ download_if_not_exists() {
 }
 
 # Download IMQA packages
-IMQA_PACKAGE_FILE="rhel8.x-imqa-packages.tar.xz"
+IMQA_PACKAGE_FILE="rhel8.x-imqa-packages.tar.gz"
 download_if_not_exists "https://cdn.oh.camp/install/$IMQA_PACKAGE_FILE" "$IMQA_PACKAGE_FILE" "IMQA package file"
 
 # Download PM2

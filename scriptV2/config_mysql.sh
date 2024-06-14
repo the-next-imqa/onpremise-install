@@ -40,7 +40,6 @@ if [ -f "$MYSQL_SERVICE_FILE_PATH" ]; then
   echo "[IMQA] Please change MySQL config file name from /etc/my.cnf to /etc/my.cnf.bak as sudo"
   echo "[IMQA] Then restart service: $(tput bold)systemctl --user restart mysqld@imqa$(tput sgr0)"
   cp "$MYSQL_SERVICE_ENV_FILE_PATH" "$USER_DIR/"
-  # cp "$MYSQL_PRE_SCRIPT_FILE_PATH" "$SCRIPT_PATH/"
   # Pre-script template
   envsubst < $MYSQL_PRE_SCRIPT_FILE_TEMPLATE_PATH | sed -e 's/$!/$/g' > "$SCRIPT_PATH/$MYSQL_PRE_SCRIPT_FILE"
   systemctl --user daemon-reload

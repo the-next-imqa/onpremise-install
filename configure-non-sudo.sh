@@ -10,6 +10,7 @@ export SCRIPT_PATH="$HOME/.scripts"
 # Script paths
 CONFIGURE_MYSQL_SCRIPT="$PWD/scriptV2/config_mysql.sh"
 CONFIGURE_REDIS_SCRIPT="$PWD/scriptV2/config_redis.sh"
+CONFIGURE_RABBITMQ_SCRIPT="$PWD/scriptV2/config_rabbitmq.sh"
 
 # Function to confirm user input
 confirm() {
@@ -93,5 +94,6 @@ create_dir "$SCRIPT_PATH"
 # Register services
 handle_service "MySQL" "$CONFIGURE_MYSQL_SCRIPT" "mysql"
 handle_service "Redis" "$CONFIGURE_REDIS_SCRIPT" "redis"
+handle_service "RabbitMQ" "$CONFIGURE_RABBITMQ_SCRIPT" "rabbitmq"
 
 echo "Script execution completed."

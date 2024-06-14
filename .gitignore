@@ -137,5 +137,6 @@ nodejs
 pm2
 !tar*.rpm
 rhel8.x-imqa-packages.tar.xz
+rhel8.x-imqa-packages.tar.gz
 repo
 imqa-packages*.tar.gz

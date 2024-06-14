@@ -4,8 +4,8 @@ After=syslog.target network.target
 
 [Service]
 Type=notify
-User=rabbitmq
-Group=rabbitmq
+# User=rabbitmq
+# Group=rabbitmq
 UMask=0027
 NotifyAccess=all
 TimeoutStartSec=600
@@ -31,7 +31,8 @@ LimitNOFILE=32768
 # https://www.rabbitmq.com/monitoring.html
 Restart=on-failure
 RestartSec=10
-WorkingDirectory=/var/lib/rabbitmq
+Environment=RABBITMQ_CONFIG_FILES=$RABBITMQ_CONFIG_FILES
+WorkingDirectory=%h/rabbitmq
 ExecStart=/usr/sbin/rabbitmq-server
 ExecStop=/usr/sbin/rabbitmqctl shutdown
 # See rabbitmq/rabbitmq-server-release#51

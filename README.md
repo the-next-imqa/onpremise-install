@@ -181,6 +181,8 @@ yum --showduplicates list java-11-openjdk-devel
 ```
 
 - `11.0.3.7-2.el8_0`
+- `11.0.20.0.8-2.el8`
+- `11.0.23.0.9-3.el8`
 
 ```sh
 yum install java-11-openjdk-devel-11.0.3.7-2.el8_0
