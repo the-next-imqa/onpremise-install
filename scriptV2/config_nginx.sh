@@ -20,9 +20,11 @@ export NGINX_ERROR_LOG_PATH="$NGINX_BASE_PATH/error.log"
 export NGINX_PID_PATH="$NGINX_BASE_PATH/nginx.pid"
 export NGINX_DYNAMIC_MODULES_PATH="$NGINX_BASE_PATH/modules/*.conf"
 export NGINX_CONFIG="$NGINX_BASE_PATH/nginx.conf"
+export NGINX_CLIENT_BODY_PATH="$NGINX_BASE_PATH/temp"
 
 create_dir "$NGINX_BASE_PATH"
 create_dir "$NGINX_CONF_D_PATH"
+create_dir "$NGINX_CLIENT_BODY_PATH"
 
 echo "Registering NGINX service system daemon of non-sudo user"
 if [ -f "$NGINX_SERVICE_FILE_PATH" ]; then
@@ -38,7 +40,7 @@ if [ -f "$NGINX_SERVICE_FILE_PATH" ]; then
   if confirm "Do you want to generate IMQA nginx conf files?"; then
     sh $NGINX_CONFD_SCRIPT
   fi
-  
+
   systemctl --user daemon-reload
   systemctl --user enable nginx@imqa
   systemctl --user restart nginx@imqa
