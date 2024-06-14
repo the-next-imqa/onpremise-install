@@ -11,7 +11,7 @@ fi
 echo "[IMQA] Registering NGINX service to system daemon as non-sudo user"
 
 export NGINX_BASE_PATH=$(read_input "Enter the full path of Nginx base path" "$HOME/nginx")
-export NGINX_CONF_D_PATH=$(read_input "Enter the full path of Nginx conf.d path" "$NGINX_BASE_PATH/conf.d/*.conf")
+export NGINX_CONF_D_PATH=$(read_input "Enter the full path of Nginx conf.d path. Should end with trailing /" "$NGINX_BASE_PATH/conf.d/")
 
 export NGINX_CONFIG_FILE="$NGINX_BASE_PATH/nginx.conf"
 NGINX_CONFIG_FILE_PATH="$PWD/template/nginx/$NGINX_CONFIG_FILE"
