@@ -28,6 +28,8 @@ echo "Registering NGINX service system daemon of non-sudo user"
 if [ -f "$NGINX_SERVICE_FILE_PATH" ]; then
   echo "Copying $NGINX_SERVICE_FILE to $USER_DIR..."
   cp "$(which nginx)" "$SBIN_DIR/"
+  echo "Copying base files"
+  cp /etc/nginx/* "$NGINX_BASE_PATH/"
   echo "Templating $NGINX_SERVICE_FILE_PATH"
   envsubst <"$NGINX_SERVICE_FILE_PATH" >"$USER_DIR/$NGINX_SERVICE_FILE"
   echo "Templating $NGINX_CONFIG_FILE_PATH"
