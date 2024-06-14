@@ -4,6 +4,7 @@ NGINX_SERVICE_FILE="nginx@imqa.service"
 NGINX_SERVICE_FILE_PATH="$PWD/template/nginx/$NGINX_SERVICE_FILE"
 NGINX_CONFIG_FILE="nginx.conf"
 NGINX_CONFIG_FILE_PATH="$PWD/template/nginx/$NGINX_CONFIG_FILE"
+NGINX_CONFD_SCRIPT="$PWD/template/nginx/confs/configure.sh"
 
 if [ "$EUID" == 0 ]; then
   echo "Do not run as sudoer"
@@ -31,6 +32,11 @@ if [ -f "$NGINX_SERVICE_FILE_PATH" ]; then
   envsubst <"$NGINX_SERVICE_FILE_PATH" >"$USER_DIR/$NGINX_SERVICE_FILE"
   echo "Templating $NGINX_CONFIG_FILE_PATH"
   envsubst <"$NGINX_CONFIG_FILE_PATH" | sed -e 's/$!/$/g' >"$NGINX_CONFIG"
+
+  if confirm "Do you want to generate IMQA nginx conf files?"; then
+    sh $NGINX_CONFD_SCRIPT
+  fi
+
   systemctl --user daemon-reload
   systemctl --user enable nginx@imqa
   systemctl --user restart nginx@imqa
