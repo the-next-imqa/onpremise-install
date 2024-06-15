@@ -56,7 +56,7 @@ if [ -f "$HAPROXY_SERVICE_FILE_PATH" ]; then
   cp $HAPROXY_SERVICe_ENV_FILE_PATH "$USER_DIR/$HAPROXY_SERVICE_ENV_FILE"
 
   echo "Templating $HAPROXY_CONFIG_FILE_PATH"
-  envsubst <"$HAPROXY_CONFIG_FILE_PATH" >"$HAPROXY_BASE_PATH/$HAPROXY_CONFIG_FILE"
+  envsubst <"$HAPROXY_CONFIG_FILE_PATH" | awk '{gsub(/\\n/, "\n")}1' >"$HAPROXY_BASE_PATH/$HAPROXY_CONFIG_FILE"
   systemctl --user daemon-reload
   systemctl --user enable haproxy@imqa
   systemctl --user restart haproxy@imqa
