@@ -33,7 +33,7 @@ export HAPROXY_ENV_FILE="$USER_DIR/$HAPROXY_SERVICE_ENV_FILE"
 
 create_dir "$HAPROXY_BASE_PATH"
 create_dir "$HAPROXY_CFGDIR"
-create_dir "$HAPROXY_LOG_PATH"
+# create_dir "$HAPROXY_LOG_PATH"
 create_dir "$HAPROXY_CHROOT_PATH"
 create_dir "$HAPROXY_ERROR_FILE_PATH"
 create_dir "$HAPROXY_SSL_PATH"
