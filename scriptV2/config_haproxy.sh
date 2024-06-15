@@ -20,7 +20,8 @@ export COLLECTOR_DOMAIN=$(read_input "Enter the collector domain" "collector.imq
 export HAPROXY_PORT=$(read_input "Enter the open port for HAProxy" "443")
 
 export HAPROXY_CHROOT_PATH="$HAPROXY_BASE_PATH/haproxy"
-export HAPROXY_LOG_PATH="$HAPROXY_BASE_PATH/log"
+# export HAPROXY_LOG_PATH="$HAPROXY_BASE_PATH/log"
+export HAPROXY_LOG_PATH="/dev/log"
 export HAPROXY_STATS_SOCKET_PATH="$HAPROXY_BASE_PATH/admin.sock"
 export HAPROXY_DH_PARAM_FILE="$HAPROXY_BASE_PATH/dhparams.pem"
 export HAPROXY_ERROR_FILE_PATH="$HAPROXY_BASE_PATH/error"
