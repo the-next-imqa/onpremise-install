@@ -12,6 +12,7 @@ CONFIGURE_MYSQL_SCRIPT="$PWD/scriptV2/config_mysql.sh"
 CONFIGURE_REDIS_SCRIPT="$PWD/scriptV2/config_redis.sh"
 CONFIGURE_RABBITMQ_SCRIPT="$PWD/scriptV2/config_rabbitmq.sh"
 CONFIGURE_NGINX_SCRIPT="$PWD/scriptV2/config_nginx.sh"
+CONFIGURE_HAPROXY_SCRIPT="$PWD/scriptV2/config_haproxy.sh"
 
 # Function to confirm user input
 confirm() {
@@ -97,5 +98,6 @@ handle_service "MySQL" "$CONFIGURE_MYSQL_SCRIPT" "mysql"
 handle_service "Redis" "$CONFIGURE_REDIS_SCRIPT" "redis"
 handle_service "RabbitMQ" "$CONFIGURE_RABBITMQ_SCRIPT" "rabbitmq"
 handle_service "NginX" "$CONFIGURE_NGINX_SCRIPT" "nginx"
+handle_service "HAProxy" "$CONFIGURE_HAPROXY_SCRIPT" "haproxy"
 
 echo "Script execution completed."
