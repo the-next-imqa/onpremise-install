@@ -1,0 +1,18 @@
+[Unit]
+Description=HAProxy Load Balancer
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Environment="CONFIG=$HAPROXY_CONFIG" "PIDFILE=$HAPROXY_PIDFILE" "CFGDIR=$HAPROXY_CFGDIR"
+EnvironmentFile=$HAPROXY_ENV_FILE
+ExecStartPre=%h/.sbin/haproxy -f $!CONFIG -f $!CFGDIR -c -q $!OPTIONS
+ExecStart=%h/.sbin/haproxy -Ws -f $!CONFIG -f $!CFGDIR -p $!PIDFILE $!OPTIONS
+ExecReload=%h/.sbin/haproxy -f $!CONFIG -f $!CFGDIR -c -q $!OPTIONS
+ExecReload=/bin/kill -USR2 $!MAINPID
+SuccessExitStatus=143
+KillMode=mixed
+Type=notify
+
+[Install]
+WantedBy=multi-user.target
