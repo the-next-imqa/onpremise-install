@@ -38,7 +38,7 @@ create_dir "$HAPROXY_SSL_PATH"
 BACKENDS=""
 for i in $(seq 1 $BACKEND_COUNT); do
     BACKEND_SERVER_IP=$(read_input "Enter the backend server $i IP" "localhost")
-    BACKEND_SERVER_PORT=$(read_input "Enter the backend server $i port" $((1000 * $i + 2000))
+    BACKEND_SERVER_PORT=$(read_input "Enter the backend server $i port" "$(1000 * $i + 2000)")
     BACKENDS+="    server MPMCollectorApi0$i $BACKEND_SERVER_IP:$BACKEND_SERVER_PORT cookie s1 check ssl verify none inter 5000 fastinter 1000 rise 1 fall 1 weight 1\n"
 done
 export BACKENDS
